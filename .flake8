@@ -1,0 +1,9 @@
+[flake8]
+# 忽略特定错误（如 E203 是空格与冒号的冲突，W503 是换行符前的运算符）
+extend-ignore = E203, W503
+
+# 每行最大字符数（默认79，这里放宽到88以适配 black 格式化工具）
+max-line-length = 88
+
+# 排除不需要检查的目录/文件
+exclude = .venv/, __pycache__, tests/

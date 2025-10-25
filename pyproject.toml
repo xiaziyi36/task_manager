@@ -1,0 +1,11 @@
+[tool.black]
+# 每行最大字符数（默认88）
+line-length = 88
+# 排除不需要格式化的文件/目录
+exclude = '''
+/(
+    \.venv
+  | __pycache__
+  | tests/legacy
+)/
+'''

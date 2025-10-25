@@ -1,0 +1,5 @@
+python-dotenv==1.0.0
+flake8==6.0.0
+black==23.12.1
+psycopg2==2.9.5
+pytest==7.4.3

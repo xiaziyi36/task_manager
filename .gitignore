@@ -1,0 +1,105 @@
+# ==================================
+# Python 核心忽略规则
+# ==================================
+# 字节码文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C 扩展
+*.so
+
+# 分发/打包
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.env/
+.venv/
+*_venv/
+*_env/
+
+# 测试相关
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.pytest_cache/
+.benchmarks/
+
+# 文档构建
+docs/_build/
+doc/_build/
+.sphinx/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb~
+
+# 日志文件
+*.log
+logs/
+
+# ==================================
+# 项目特定忽略规则
+# ==================================
+# 环境变量文件（包含数据库密码等敏感信息）
+.env
+!.env.example  # 保留示例文件（不含真实密码）
+
+# 数据库相关（如果有本地数据库文件）
+*.db
+*.sqlite3
+*.sql
+*.psql
+pgdata/  # PostgreSQL 数据目录
+
+# 操作系统相关文件
+.DS_Store  # macOS
+Thumbs.db  # Windows
+desktop.ini  # Windows
+*.swp  # Vim 临时文件
+*.swo  # Vim 临时文件
+
+# IDE 配置文件（根据你的开发工具选择保留或忽略）
+.idea/  # PyCharm
+.vscode/  # VS Code
+*.sublime-*  # Sublime Text
+.project  # Eclipse
+.classpath  # Eclipse
+.c9/  # Cloud9
+*.launch  # Eclipse
+.settings/  # Eclipse
+*.sublime-project
+*.sublime-workspace
+
+# 其他临时文件
+tmp/
+temp/
+*.bak
+*.tmp
+*~
