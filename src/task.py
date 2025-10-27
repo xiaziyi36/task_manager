@@ -55,28 +55,34 @@ def initialize_table(connection):
 
 
 def add_task(conn):
-    # 1. 获取用户输入（标题、描述等，与测试中的模拟输入对应）
+    # 1. 获取用户输入（补充优先级的获取逻辑）
     title = input("请输入任务标题: ")
     description = input("请输入任务描述 (可选): ")
-    # ... 其他输入获取逻辑 ...
-
-    # 2. 执行INSERT语句（关键修正点）
+    
+    # 新增：获取优先级输入（并处理默认值）
+    priority_input = input("请输入优先级 (1-最高, 2-高, 3-中, 4-低, 5-最低, 默认3): ")
+    # 处理默认值：如果用户未输入，默认3
+    priority = int(priority_input) if priority_input.strip() else 3
+    
+    # 新增：获取截止日期输入（可选，留空则为None）
+    due_date_str = input("请输入截止日期 (格式: YYYY-MM-DD HH:MM, 可选): ")
+    due_date = due_date_str if due_date_str.strip() else None  # 或转换为datetime对象
+    
+    # 2. 执行INSERT语句
     cursor = conn.cursor()
-    # 正确的INSERT语句，需包含所有任务字段，并通过RETURNING id返回任务ID
     insert_sql = """
         INSERT INTO tasks (title, description, priority, due_date, created_at, is_completed)
         VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP, FALSE)
-        RETURNING id;  # 适配PostgreSQL的ID返回方式
+        RETURNING id;
     """
-    # 绑定参数（避免SQL注入，参数顺序与字段对应）
+    # 现在priority变量已定义，可正常传递
     cursor.execute(insert_sql, (title, description, priority, due_date))
-
-    # 3. 获取返回的任务ID并提示成功
+    
+    # 3. 获取返回的任务ID并提交
     task_id = cursor.fetchone()[0]
     conn.commit()
     print(f"任务添加成功! 任务ID: {task_id}")
     cursor.close()
-
 
     try:
         cursor = connection.cursor()
