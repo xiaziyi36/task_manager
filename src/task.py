@@ -97,7 +97,6 @@ def add_task(conn):
             print(f"预测该任务按时完成的概率: {probability:.1%}")
     except Error as err:
         print(f"添加任务失败: {err}")
-        connection.rollback()
 
 
 def view_tasks(connection):
