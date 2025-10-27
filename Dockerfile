@@ -5,13 +5,14 @@ FROM postgis/postgis:10-2.5-alpine
 LABEL maintainer="task-manager"
 
 # 1. 安装系统依赖（删除libpq，避免版本冲突）
+# postgresql-dev已包含libpq，无需单独安装
 RUN apk add --no-cache \
     python3 \
     py3-pip \
     python3-dev \
     gcc \
     musl-dev \
-    postgresql-dev \  # postgresql-dev已包含libpq，无需单独安装
+    postgresql-dev \  # 这里的反斜杠后不能有注释，否则失效
     && ln -sf python3 /usr/bin/python \
     && ln -sf pip3 /usr/bin/pip
 
