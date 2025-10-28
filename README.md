@@ -1,16 +1,1 @@
-# Task Manager with ML-Powered Completion Forecast
-
-A **command-line task manager** backed by **PostgreSQL** and **scikit-learn**.  
-Add, update, delete or query tasks—and get an **on-the-spot probability** that a task will finish on time, trained on your own historical data.
-
----
-
-## ✨ Features
-- Full CRUD operations for tasks (title, description, priority 1-5, due date)
-- Auto-initialization of PostgreSQL schema
-- Machine-learning pipeline:
-  - Trains a Linear Regression model when ≥ 10 completed/overdue tasks exist
-  - Predicts completion probability for any open task
-  - StandardScaler + train/test split + accuracy report
-- Env-file configuration for all DB secrets
-- Docker & GitHub Actions ready (CI → staging → prod)
+This is a Personal Task Management System with features like task CRUD, priority sorting, and ML-powered (Logistic Regression/XGBoost) task completion prediction. It integrates tools like  flake8 ,  black ,  pytest , uses Docker for deployment, and has GitHub Workflow for automated CI. Built with Python, PostgreSQL, it supports quick setup via Docker and local development with virtual environments.
