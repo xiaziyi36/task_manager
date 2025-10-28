@@ -54,40 +54,47 @@ def initialize_table(connection):
         connection.rollback()
 
 
-def add_task(connection):
-    """添加新任务"""
-    title = input("请输入任务标题: ").strip()
-    if not title:
-        print("任务标题不能为空!")
-        return
-
-    description = input("请输入任务描述 (可选): ").strip() or None
-    priority = input("请输入优先级 (1-最高, 2-高, 3-中, 4-低, 5-最低, 默认3): ").strip()
-    priority = int(priority) if priority and priority in ['1', '2', '3', '4', '5'] else 3
-
-    due_date = input("请输入截止日期 (格式: YYYY-MM-DD HH:MM, 可选): ").strip()
-    due_date = due_date if due_date else None
-
-    query = """
-    INSERT INTO tasks (title, description, priority, due_date)
-    VALUES (%s, %s, %s, %s)
-    RETURNING id;
-    """
-
+def add_task(conn):
+    # 1. 获取用户输入（补充优先级的获取逻辑）
+    title = input("请输入任务标题: ")
+    description = input("请输入任务描述 (可选): ")
+    
+    # 新增：获取优先级输入（并处理默认值）
+    priority_input = input("请输入优先级 (1-最高, 2-高, 3-中, 4-低, 5-最低, 默认3): ")
+    # 处理默认值：如果用户未输入，默认3
+    priority = int(priority_input) if priority_input.strip() else 3
+    
+    # 新增：获取截止日期输入（可选，留空则为None）
+    due_date_str = input("请输入截止日期 (格式: YYYY-MM-DD HH:MM, 可选): ")
+    due_date = due_date_str if due_date_str.strip() else None  # 或转换为datetime对象
+    
+    # 2. 执行INSERT语句（保留原逻辑，补充概率预测）
     try:
-        cursor = connection.cursor()
-        cursor.execute(query, (title, description, priority, due_date))
-        task_id = cursor.fetchone()[0]  # 获取返回的ID
-        connection.commit()
+        cursor = conn.cursor()
+        insert_sql = """
+            INSERT INTO tasks (title, description, priority, due_date, created_at, is_completed)
+            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP, FALSE)
+            RETURNING id;
+        """
+        cursor.execute(insert_sql, (title, description, priority, due_date))
+        
+        # 3. 获取返回的任务ID并提交
+        task_id = cursor.fetchone()[0]
+        conn.commit()
         print(f"任务添加成功! 任务ID: {task_id}")
         
-        # 如果有足够的历史数据，预测新任务的完成概率
-        if has_enough_data(connection):
-            probability = predict_completion_probability(connection, task_id)
+        # 新增：任务添加成功后，预测完成概率（复用原有预测逻辑）
+        if has_enough_data(conn):
+            probability = predict_completion_probability(conn, task_id)
             print(f"预测该任务按时完成的概率: {probability:.1%}")
+            
     except Error as err:
         print(f"添加任务失败: {err}")
-        connection.rollback()
+        conn.rollback()  # 出错时回滚事务
+    finally:
+        if 'cursor' in locals():  # 确保游标关闭
+            cursor.close()
+
 
 
 def view_tasks(connection):
